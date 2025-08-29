@@ -3,7 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 type Todo struct {
@@ -13,8 +15,8 @@ type Todo struct {
 	Completed bool   `json:"completed"`
 }
 
-func main() {
-	fmt.Println("Learning CRUD opertionas")
+// get request
+func performGetRequest() {
 	res, err := http.Get("https://jsonplaceholder.typicode.com/todos/1")
 
 	if err != nil {
@@ -52,4 +54,79 @@ func main() {
 	}
 
 	fmt.Println("Todo:", todo)
+}
+
+func performPostRequest() {
+	todo := Todo{
+		UserId:    1,
+		Title:     "Tarun Tiwari",
+		Completed: true,
+	}
+
+	//now we have to convert our object into json
+	jsonData, err := json.Marshal(todo)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	data := string(jsonData)
+
+	//for posting the string data we have to convert our data into reader
+	dataReader := strings.NewReader(data)
+
+	//now we can post our request the specific endpoint
+	myUrl := "https://jsonplaceholder.typicode.com/todos"
+
+	res, err := http.Post(myUrl, "application/json", dataReader)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+
+	defer res.Body.Close()
+
+	finalData, _ := ioutil.ReadAll(res.Body)
+	fmt.Println("Data from response", string(finalData))
+	fmt.Println("Response status:", res.Status)
+}
+
+func performUpdateMethod() {
+	todo := Todo{
+		UserId:    1,
+		Title:     "Tarun Tiwari",
+		Completed: true,
+	}
+
+	//now we have to convert our object into json
+	jsonData, err := json.Marshal(todo)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+	data := string(jsonData)
+
+	//for posting the string data we have to convert our data into reader
+	dataReader := strings.NewReader(data)
+
+	//now we can post our request the specific endpoint
+	myUrl := "https://jsonplaceholder.typicode.com/todos/1"
+
+	req, err := http.NewRequest(http.MethodPut, myUrl, dataReader)
+
+	if err != nil {
+		fmt.Println("Error found,", err)
+		return
+	}
+
+}
+
+func main() {
+	fmt.Println("Learning CRUD opertionas")
+
+	//performGetRequest()  //get request learnt how an we do gert the data from the server
+
+	performPostRequest() //post request learnt how we can post the data to the server
 }
