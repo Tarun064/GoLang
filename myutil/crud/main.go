@@ -121,6 +121,24 @@ func performUpdateMethod() {
 		return
 	}
 
+	req.Header.Set("Content-Type", "application/json")
+
+	//send the request
+	client := http.Client{}
+
+	res, err := client.Do(req)
+
+	if err != nil {
+		fmt.Println("Error found,", err)
+		return
+	}
+
+	defer res.Body.Close()
+
+	dataa, _ := ioutil.ReadAll(res.Body)
+	fmt.Println("Data from response", string(dataa))
+	fmt.Println("Response status:", res.Status)
+
 }
 
 func main() {
@@ -128,5 +146,7 @@ func main() {
 
 	//performGetRequest()  //get request learnt how an we do gert the data from the server
 
-	performPostRequest() //post request learnt how we can post the data to the server
+	//performPostRequest() //post request learnt how we can post the data to the server
+
+	performUpdateMethod() //put/patch request learnt how we can update the data to the server
 }
