@@ -141,6 +141,32 @@ func performUpdateMethod() {
 
 }
 
+func performDeleteMethod() {
+	myUrl := "https://jsonplaceholder.typicode.com/todos/1"
+
+	req, err := http.NewRequest(http.MethodDelete, myUrl, nil)
+
+	if err != nil {
+		fmt.Println("Error found,", err)
+		return
+	}
+
+	//send the request
+	client := http.Client{}
+
+	res, err := client.Do(req)
+
+	if err != nil {
+		fmt.Println("Error found,", err)
+		return
+	}
+
+	defer res.Body.Close()
+
+	fmt.Println("Response status:", res.Status)
+
+}
+
 func main() {
 	fmt.Println("Learning CRUD opertionas")
 
@@ -148,5 +174,7 @@ func main() {
 
 	//performPostRequest() //post request learnt how we can post the data to the server
 
-	performUpdateMethod() //put/patch request learnt how we can update the data to the server
+	//performUpdateMethod() //put/patch request learnt how we can update the data to the server
+
+	performDeleteMethod() //delete request learnt how we can delete the data from the server
 }
